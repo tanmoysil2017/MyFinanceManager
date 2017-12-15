@@ -17,7 +17,7 @@ class TimeFrame():
         if day_of_month >= today:
             day_of_month = day_of_month + relativedelta(months=-1)
 
-        if period == 'months':
+        if period == 'month':
             for i in range(0, no_of_periods):
                 if day_of_month.weekday() > 4:
                     tempday = day_of_month + relativedelta(weekday=FR(-1))
