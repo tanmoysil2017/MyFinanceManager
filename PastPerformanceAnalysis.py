@@ -58,5 +58,6 @@ class PastPerformanceAnalysis():
         collection_of_rate.find_from_SchemeCode(strCode)
         return collection_of_rate.instances
 
-a = PastPerformanceAnalysis()
-a.execute()
+if __name__ == '__main__':
+    a = PastPerformanceAnalysis()
+    a.execute()

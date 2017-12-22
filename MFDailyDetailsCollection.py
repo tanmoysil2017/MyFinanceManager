@@ -11,19 +11,29 @@ class MFDailyDetailsCollection():
         self.instances = instances
         self.download_date = datetime.date.today()
 
-    def execute(self):
-        mongo = MongoInterface()
+    def execute(self, download_date=datetime.date.today(), use_mongo=False):
+        if use_mongo:
+            mongo = MongoInterface()
+            for i in self.instances:
+                mongo.insert(i, DailyRateCollectionName)
+        else:
+            if not self.instances:
+                self.download_from_internet(download_date)
 
-        for i in self.instances:
-            mongo.insert(i, DailyRateCollectionName)
+    def find_from_SchemeCode(self, code, use_mongo=False):
+        if use_mongo:
+            mongo = MongoInterface()
+            items = mongo.search({'SchemeCode': code}, DailyRateCollectionName).sort('date',pymongo.DESCENDING)
+            self.instances = []
+            for item in items:
+                self.instances.append(MFDailyDetails(item))
+        elif self.instances:
+            for ins in self.instances:
+                if ins.SchemeCode == code:
+                    return ins.SalePrice
 
-    def find_from_SchemeCode(self, code):
-        mongo = MongoInterface()
-        items = mongo.search({'SchemeCode': code}, DailyRateCollectionName).sort('date',pymongo.DESCENDING)
-        self.instances = []
-        for item in items:
-            self.instances.append(MFDailyDetails(item))
-
+            print('No NAV found for {}'.format(code))
+            return 0.0
 
     def download_from_internet(self, download_date):
         import urllib3

@@ -8,7 +8,8 @@ from MDBObject import MDBObject
 
 class MFDailyDetails(MDBObject):
 
-    def __init__(self, json_data = {}):
+    def __init__(self, json_data={}):
+        super(MFDailyDetails, self).__init__()
         if json_data != {}:
             self.SchemeCode = json_data['SchemeCode']
             self.SchemeName = json_data['SchemeName']
